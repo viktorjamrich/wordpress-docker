@@ -1,7 +1,6 @@
 services:
   db:
     image: mysql:8.0
-    container_name: wp-mysql
     command: --default-authentication-plugin=mysql_native_password --innodb-buffer-pool-size=512M
     environment:
       MYSQL_DATABASE: dbname
@@ -19,7 +18,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: wp-phpfpm
     environment:
       TZ: Europe/Bratislava
       # Example overrides if you add an ini file:

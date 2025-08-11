@@ -1,0 +1,1 @@
+Copy all wordpress files right here into this folder

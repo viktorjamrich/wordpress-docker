@@ -1,0 +1,47 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: wp-mysql
+    command: --default-authentication-plugin=mysql_native_password --innodb-buffer-pool-size=512M
+    environment:
+      MYSQL_DATABASE: dbname
+      MYSQL_USER: username
+      MYSQL_PASSWORD: pass
+      MYSQL_ROOT_PASSWORD: strongPass
+      # Optional: set a proper TZ matching your location
+      TZ: Europe/Bratislava
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - wpnet
+
+  phpfpm:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wp-phpfpm
+    environment:
+      TZ: Europe/Bratislava
+      # Example overrides if you add an ini file:
+      # PHP_MEMORY_LIMIT: 512M
+    volumes:
+      - ./wordpress:/var/www/html
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD", "php", "-v"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    networks:
+      - wpnet
+    ports:
+      - "127.0.0.1:8080:80"
+
+volumes:
+  db_data:
+
+networks:
+  wpnet:
+    driver: bridge
+

@@ -6,7 +6,8 @@ RUN apt-get update && \
     a2enmod proxy_fcgi setenvif rewrite headers && \
     a2enconf php8.4-fpm && \
     a2enmod mpm_event && \
-    a2dismod mpm_prefork || true
+    a2dismod mpm_prefork && \
+    a2enmod remoteip || true
 
 # Enable default site (we’ll override config if needed)
 RUN a2ensite 000-default.conf
